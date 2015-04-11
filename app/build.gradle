@@ -31,4 +31,5 @@ dependencies {
     compile 'com.squareup.dagger:dagger:1.2.2'
     compile 'com.squareup.dagger:dagger-compiler:1.2.2'
     compile 'com.jakewharton.timber:timber:2.7.1'
+    compile 'com.octo.android.robospice:robospice:1.4.14'
 }
