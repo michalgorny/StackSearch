@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import pl.michalgorny.stacksearch.ui.SearchActivity;
 
 /**
  * Module to satisfying application dependencies using Dagger
@@ -13,7 +14,7 @@ import dagger.Provides;
 
 @Module(
     injects = {
-
+            SearchActivity.class
     }
 )
 public class AppModule {
