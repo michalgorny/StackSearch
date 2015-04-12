@@ -1,5 +1,6 @@
 package pl.michalgorny.stacksearch.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.Data;
 /**
  * Pojo for one item. It represents a item object from server response.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 public class StackItem {
     @JsonProperty("owner")
