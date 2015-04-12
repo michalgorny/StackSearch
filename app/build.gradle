@@ -18,6 +18,10 @@ android {
         }
     }
 
+    lintOptions{
+        abortOnError false
+    }
+
     packagingOptions {
         pickFirst 'META-INF/services/javax.annotation.processing.Processor'
         exclude 'META-INF/LICENSE.txt'
@@ -44,4 +48,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.2.+'
     provided "org.projectlombok:lombok:1.12.6"
     compile 'com.f2prateek.dart:dart:1.1.0'
+    compile 'in.srain.cube:ultra-ptr:1.0.9@aar'
+    compile 'com.skocken:efficientadapter.lib:1.2.+'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
