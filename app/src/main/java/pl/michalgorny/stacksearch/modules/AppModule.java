@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import pl.michalgorny.stacksearch.rest.StackQuestionListener;
 import pl.michalgorny.stacksearch.ui.ResultsActivity;
 import pl.michalgorny.stacksearch.ui.SearchActivity;
 
@@ -16,7 +17,8 @@ import pl.michalgorny.stacksearch.ui.SearchActivity;
 @Module(
     injects = {
             SearchActivity.class,
-            ResultsActivity.class
+            ResultsActivity.class,
+            StackQuestionListener.class
     }
 )
 public class AppModule {
