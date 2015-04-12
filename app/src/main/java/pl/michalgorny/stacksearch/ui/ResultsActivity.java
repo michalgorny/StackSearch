@@ -59,4 +59,15 @@ public class ResultsActivity extends AbstractActivity {
         super.onStop();
     }
 
+    @Subscribe
+    public void handleSuccessEvent(RequestSuccessEvent event){
+        Toast.makeText(this, String.valueOf(event.getStackQuestionResponse().getItems().size()), Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void handleFailureEvent(RequestFailureEvent event){
+        Toast.makeText(this, event.getSpiceException().getMessage().toString(), Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
 }

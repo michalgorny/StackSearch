@@ -1,5 +1,7 @@
 package pl.michalgorny.stacksearch.modules;
 
+import com.octo.android.robospice.Jackson2SpringAndroidSpiceService;
+import com.octo.android.robospice.SpiceManager;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
@@ -26,6 +28,11 @@ public class AppModule {
     @Singleton
     public Bus provideBus(){
         return new Bus();
+    }
+
+    @Provides
+    public SpiceManager provideSpiceManager(){
+        return new SpiceManager(Jackson2SpringAndroidSpiceService.class);
     }
 
 }

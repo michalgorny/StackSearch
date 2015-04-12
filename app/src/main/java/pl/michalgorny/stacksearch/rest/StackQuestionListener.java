@@ -7,7 +7,9 @@ import com.squareup.otto.Bus;
 import javax.inject.Inject;
 
 import pl.michalgorny.stacksearch.StackSearchApplication;
+import pl.michalgorny.stacksearch.events.RequestSuccessEvent;
 import pl.michalgorny.stacksearch.pojos.StackQuestionResponse;
+import pl.michalgorny.stacksearch.events.RequestFailureEvent;
 import timber.log.Timber;
 
 /**
@@ -20,15 +22,18 @@ public class StackQuestionListener implements RequestListener<StackQuestionRespo
 
     public StackQuestionListener() {
         StackSearchApplication.doDaggerInject(this);
+        mBus.register(this);
     }
 
     @Override
     public void onRequestFailure(SpiceException spiceException) {
         Timber.e("Request failed! " + spiceException.getMessage()) ;
+        mBus.post(new RequestFailureEvent(spiceException));
     }
 
     @Override
     public void onRequestSuccess(StackQuestionResponse stackQuestionResponse) {
         Timber.d("Request success");
+        mBus.post(new RequestSuccessEvent(stackQuestionResponse));
     }
 }
