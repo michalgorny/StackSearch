@@ -43,4 +43,5 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.2.+'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.2.+'
     provided "org.projectlombok:lombok:1.12.6"
+    compile 'com.f2prateek.dart:dart:1.1.0'
 }
