@@ -5,8 +5,8 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/result_list_item_avatar"
         android:padding="@dimen/result_list_item_avatar_padding"
         android:layout_alignParentTop="true"

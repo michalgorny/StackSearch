@@ -12,7 +12,7 @@ import pl.michalgorny.stacksearch.R;
 import pl.michalgorny.stacksearch.pojos.StackItem;
 
 /**
- *
+ *  ViewHolder for RecyclerView.Adapter. It is used by SimpleAdapter.
  */
 public class StackItemHolder extends AbsViewHolder<StackItem>{
 
@@ -34,6 +34,7 @@ public class StackItemHolder extends AbsViewHolder<StackItem>{
                 .load(stackItem.getOwner().getProfileImage())
                 .resize(300, 300)
                 .centerCrop()
+                .placeholder(R.drawable.placeholder)
                 .into(avatar);
     }
 }
