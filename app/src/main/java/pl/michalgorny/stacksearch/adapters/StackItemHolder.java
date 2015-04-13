@@ -29,7 +29,7 @@ public class StackItemHolder extends AbsViewHolder<StackItem>{
 
         name.setText(stackItem.getOwner().getDisplayName());
         question.setText(stackItem.getTitle());
-        answersCount.setText(stackItem.getAnswerCount().toString());
+        answersCount.setText(getContext().getString(R.string.answers_count_text) + stackItem.getAnswerCount().toString());
         Picasso.with(getContext())
                 .load(stackItem.getOwner().getProfileImage())
                 .resize(300, 300)

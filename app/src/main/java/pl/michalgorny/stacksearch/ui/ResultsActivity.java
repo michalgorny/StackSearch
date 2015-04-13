@@ -62,6 +62,8 @@ public class ResultsActivity extends AbstractActivity {
     }
 
     private void initiazlizeRecycleView() {
+        mUltimateRecycleView.setHasFixedSize(true);
+
         mLayourManager = new LinearLayoutManager(this);
         mUltimateRecycleView.setLayoutManager(mLayourManager);
 
