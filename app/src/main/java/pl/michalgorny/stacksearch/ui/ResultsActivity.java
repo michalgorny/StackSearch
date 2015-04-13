@@ -1,12 +1,13 @@
 package pl.michalgorny.stacksearch.ui;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.octo.android.robospice.SpiceManager;
 import com.skocken.efficientadapter.lib.adapter.SimpleAdapter;
 import com.squareup.otto.Subscribe;
@@ -36,12 +37,14 @@ public class ResultsActivity extends AbstractActivity {
     StackQuestionListener mStackQuestionListener;
 
     @InjectView(R.id.results_recycler_view)
-    RecyclerView mResultsRecycleView;
+    UltimateRecyclerView mUltimateRecycleView;
 
     @InjectExtra(Constants.SEARCH_TEXT)
     String mTag;
 
     List<StackItem> mListItems = new ArrayList<>();
+    private SimpleAdapter mAdapter;
+    private LinearLayoutManager mLayourManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +57,23 @@ public class ResultsActivity extends AbstractActivity {
     }
 
     private void retrievePosts() {
-        setProgressBarIndeterminateVisibility(true);
         StackQuestionRequest request = new StackQuestionRequest(mTag);
         mSpiceManager.execute(request, mStackQuestionListener);
     }
 
     private void initiazlizeRecycleView() {
+        mLayourManager = new LinearLayoutManager(this);
+        mUltimateRecycleView.setLayoutManager(mLayourManager);
 
-        mResultsRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        mUltimateRecycleView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                retrievePosts();
+            }
+        });
 
-        SimpleAdapter adpater = new SimpleAdapter<StackItem>(
-                R.layout.result_list_item, StackItemHolder.class, mListItems);
-        mResultsRecycleView.setAdapter(adpater);
+        mAdapter = new SimpleAdapter<StackItem>(R.layout.result_list_item, StackItemHolder.class, mListItems);
+        mUltimateRecycleView.setAdapter(mAdapter);
     }
 
     @Override
@@ -82,7 +90,6 @@ public class ResultsActivity extends AbstractActivity {
 
     @Subscribe
     public void handleSuccessEvent(RequestSuccessEvent event){
-        Toast.makeText(this, String.valueOf(event.getStackQuestionResponse().getItems().size()), Toast.LENGTH_SHORT).show();
         populateList(event.getStackQuestionResponse().getItems());
     }
 
@@ -93,8 +100,9 @@ public class ResultsActivity extends AbstractActivity {
     }
 
     private void populateList(List<StackItem> items){
+        mListItems.clear();
         mListItems.addAll(items);
-        mResultsRecycleView.getAdapter().notifyDataSetChanged();
+        mUltimateRecycleView.getAdapter().notifyDataSetChanged();
     }
 
 }
