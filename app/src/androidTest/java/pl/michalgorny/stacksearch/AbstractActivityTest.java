@@ -1,10 +1,10 @@
 package pl.michalgorny.stacksearch;
 
-import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.View;
 
 import com.robotium.solo.Solo;
+
+import static pl.michalgorny.stacksearch.TestUtils.isOnline;
 
 /**
  * Abstract class for encapsulate common operates to derived test class
@@ -12,6 +12,7 @@ import com.robotium.solo.Solo;
 public abstract class AbstractActivityTest extends ActivityInstrumentationTestCase2 {
 
     protected Solo mSolo;
+    protected static final String SEARCH_TEXT = "android";
 
     public AbstractActivityTest(Class activityClass) {
         super(activityClass);
@@ -27,5 +28,9 @@ public abstract class AbstractActivityTest extends ActivityInstrumentationTestCa
     protected void tearDown() throws Exception {
         mSolo.finishOpenedActivities();
         super.tearDown();
+    }
+
+    protected void checkInternetStatus() {
+        assertTrue("No internet connection", isOnline(getActivity()));
     }
 }
