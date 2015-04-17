@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import pl.michalgorny.stacksearch.constants.Constants;
+import pl.michalgorny.stacksearch.ui.DetailsActivity;
 import pl.michalgorny.stacksearch.ui.ResultsActivity;
 
 /**
@@ -22,7 +23,8 @@ public class ResultsActivityTest extends AbstractActivityTest {
 
     public void testShouldDisplayPostAfterClick() throws Exception {
         checkInternetStatus();
-        mSolo.clickOnText("Answers");
+        mSolo.clickOnImage(1);
+        mSolo.assertCurrentActivity(TestErrorTexts.ACTIVITY_NOT_CHANGED, DetailsActivity.class);
     }
 
     @Override

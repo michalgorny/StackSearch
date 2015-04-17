@@ -9,4 +9,5 @@ public class Constants {
 
     public static final String STACK_API_URL = "http://api.stackexchange.com";
 
+    public static final String WEB_URL_LINK = "web_url_link";
 }

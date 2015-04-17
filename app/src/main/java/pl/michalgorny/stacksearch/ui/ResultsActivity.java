@@ -1,14 +1,17 @@
 package pl.michalgorny.stacksearch.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 import android.widget.Toast;
 
 import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.octo.android.robospice.SpiceManager;
+import com.skocken.efficientadapter.lib.adapter.AbsViewHolderAdapter;
 import com.skocken.efficientadapter.lib.adapter.SimpleAdapter;
 import com.squareup.otto.Subscribe;
 
@@ -28,6 +31,12 @@ import pl.michalgorny.stacksearch.pojos.StackItem;
 import pl.michalgorny.stacksearch.rest.StackQuestionListener;
 import pl.michalgorny.stacksearch.rest.StackQuestionRequest;
 
+import static pl.michalgorny.stacksearch.constants.Constants.WEB_URL_LINK;
+
+/**
+ *  Activity displaying a results from server with topics list
+ *  Required a extras @Constants.SEARCH_TEXT which is tag used to retrieve results list
+ */
 public class ResultsActivity extends AbstractActivity {
 
     @Inject
@@ -42,7 +51,7 @@ public class ResultsActivity extends AbstractActivity {
     @InjectExtra(Constants.SEARCH_TEXT)
     String mTag;
 
-    List<StackItem> mListItems = new ArrayList<>();
+    private List<StackItem> mListItems = new ArrayList<>();
     private SimpleAdapter mAdapter;
     private LinearLayoutManager mLayourManager;
 
@@ -75,7 +84,21 @@ public class ResultsActivity extends AbstractActivity {
         });
 
         mAdapter = new SimpleAdapter<StackItem>(R.layout.result_list_item, StackItemHolder.class, mListItems);
+
+        mAdapter.setOnItemClickListener(new AbsViewHolderAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(AbsViewHolderAdapter absViewHolderAdapter, View view, Object o, int i) {
+                showDetailsView(mListItems.get(i).getLink());
+            }
+        });
+
         mUltimateRecycleView.setAdapter(mAdapter);
+    }
+
+    private void showDetailsView(String link) {
+        Intent i = new Intent(this, DetailsActivity.class);
+        i.putExtra(WEB_URL_LINK, link);
+        startActivity(i);
     }
 
     @Override
