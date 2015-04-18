@@ -115,7 +115,7 @@ public class ResultsFragment extends Fragment {
 
     @Subscribe
     public void retrievePosts(RetrievePostsRequestEvent event) {
-        mTag = getTag();
+        mTag = event.getTag();
         retrievePosts();
     }
 
