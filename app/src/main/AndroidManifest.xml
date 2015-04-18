@@ -12,8 +12,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.SearchActivity"
-            android:label="@string/title_activity_search" >
+            android:theme="@style/AppTheme"
+            android:name=".ui.SearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,18 +21,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.ResultsActivity"
-            android:label="@string/title_activity_results" >
+            android:name=".ui.ResultsActivity">
         </activity>
 
+        <activity
+            android:name=".ui.DetailsActivity">
+        </activity>
         <service
             android:name="com.octo.android.robospice.Jackson2SpringAndroidSpiceService"
             android:exported="false" />
-
-        <activity
-            android:name=".ui.DetailsActivity"
-            android:label="@string/title_activity_details" >
-        </activity>
     </application>
 
 </manifest>

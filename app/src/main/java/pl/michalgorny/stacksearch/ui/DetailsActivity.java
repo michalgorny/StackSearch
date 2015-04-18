@@ -19,7 +19,7 @@ import pl.michalgorny.stacksearch.constants.Constants;
  * Activity displaying details about one topic. It uses a WebView and displays StackOverflow web page
  * It required to pass url to page in extras
  */
-public class DetailsActivity extends ActionBarActivity {
+public class DetailsActivity extends AbstractActivity {
 
     @InjectView(R.id.details_web_view)
     WebView mWebView;

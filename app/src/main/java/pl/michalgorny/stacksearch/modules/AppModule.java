@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import pl.michalgorny.stacksearch.rest.StackQuestionListener;
+import pl.michalgorny.stacksearch.ui.DetailsActivity;
 import pl.michalgorny.stacksearch.ui.ResultsActivity;
 import pl.michalgorny.stacksearch.ui.ResultsFragment;
 import pl.michalgorny.stacksearch.ui.SearchActivity;
@@ -21,6 +22,7 @@ import pl.michalgorny.stacksearch.ui.SearchActivity;
     injects = {
             SearchActivity.class,
             ResultsActivity.class,
+            DetailsActivity.class,
             StackQuestionListener.class,
             ResultsFragment.class
     }
