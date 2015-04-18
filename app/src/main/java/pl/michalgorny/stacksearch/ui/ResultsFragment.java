@@ -10,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.loadindicators.adrianlesniak.library.LoaderView;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.octo.android.robospice.SpiceManager;
-import com.skocken.efficientadapter.lib.adapter.AbsViewHolderAdapter;
-import com.skocken.efficientadapter.lib.adapter.SimpleAdapter;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pl.michalgorny.stacksearch.R;
 import pl.michalgorny.stacksearch.StackSearchApplication;
-import pl.michalgorny.stacksearch.adapters.StackItemHolder;
+import pl.michalgorny.stacksearch.adapters.StackItemAdapter;
 import pl.michalgorny.stacksearch.events.RequestFailureEvent;
 import pl.michalgorny.stacksearch.events.RequestSuccessEvent;
 import pl.michalgorny.stacksearch.events.RetrievePostsRequestEvent;
@@ -36,7 +36,7 @@ import pl.michalgorny.stacksearch.rest.StackQuestionRequest;
 
 import static pl.michalgorny.stacksearch.constants.Constants.WEB_URL_LINK;
 
-public class ResultsFragment extends Fragment {
+public class ResultsFragment extends Fragment implements View.OnClickListener {
 
     @Inject
     Bus mBus;
@@ -48,49 +48,55 @@ public class ResultsFragment extends Fragment {
     StackQuestionListener mStackQuestionListener;
 
     @InjectView(R.id.results_recycler_view)
-    UltimateRecyclerView mUltimateRecycleView;
+    UltimateRecyclerView mUltimateRecyclerView;
+
+    @InjectView(R.id.results_progress_bar)
+    LoaderView mLoaderView;
 
     private List<StackItem> mListItems = new ArrayList<>();
-    private SimpleAdapter mAdapter;
+    private UltimateViewAdapter mAdapter;
 
     private LinearLayoutManager mLayoutManager;
-    private String mTag;
+    private String mTag = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         StackSearchApplication.doDaggerInject(this);
+        mAdapter = new StackItemAdapter(this, mListItems);
+        mBus.post(new RetrievePostsRequestEvent(mTag));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_results, container, false);
         ButterKnife.inject(this, view);
-        initiazlizeRecycleView();
         return view;
     }
 
-    private void initiazlizeRecycleView() {
-        mUltimateRecycleView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mUltimateRecycleView.setLayoutManager(mLayoutManager);
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
 
-        mUltimateRecycleView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initiazlizeRecyclerView();
+    }
+
+    private void initiazlizeRecyclerView() {
+        mUltimateRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mUltimateRecyclerView.setLayoutManager(mLayoutManager);
+        mUltimateRecyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 retrievePosts();
             }
         });
-
-        mAdapter = new SimpleAdapter<StackItem>(R.layout.result_list_item, StackItemHolder.class, mListItems);
-        mAdapter.setOnItemClickListener(new AbsViewHolderAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(AbsViewHolderAdapter absViewHolderAdapter, View view, Object o, int i) {
-                showDetailsView(mListItems.get(i).getLink());
-            }
-        });
-        mUltimateRecycleView.setAdapter(mAdapter);
+        mUltimateRecyclerView.setAdapter(mAdapter);
     }
 
     private void showDetailsView(String link) {
@@ -115,28 +121,46 @@ public class ResultsFragment extends Fragment {
 
     @Subscribe
     public void retrievePosts(RetrievePostsRequestEvent event) {
-        mTag = event.getTag();
-        retrievePosts();
+        if (!mTag.equals(event.getTag())){
+            mTag = event.getTag();
+            retrievePosts();
+        }
     }
 
     private void retrievePosts() {
         StackQuestionRequest request = new StackQuestionRequest(mTag);
         mSpiceManager.execute(request, mStackQuestionListener);
+        showProgress(true);
     }
 
     @Subscribe
-    public void handleSuccessEvent(RequestSuccessEvent event){
+    public void handleSuccessEvent(RequestSuccessEvent event) {
         populateList(event.getStackQuestionResponse().getItems());
+        showProgress(false);
     }
 
     @Subscribe
-    public void handleFailureEvent(RequestFailureEvent event){
+    public void handleFailureEvent(RequestFailureEvent event) {
         Toast.makeText(getActivity(), event.getSpiceException().getMessage().toString(), Toast.LENGTH_SHORT).show();
+        mUltimateRecyclerView.getAdapter().notifyDataSetChanged();
+        showProgress(false);
     }
 
     private void populateList(List<StackItem> items){
         mListItems.clear();
         mListItems.addAll(items);
-        mUltimateRecycleView.getAdapter().notifyDataSetChanged();
+        mUltimateRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    private void showProgress(boolean isInProgress) {
+        mLoaderView.setVisibility(isInProgress  && mListItems.isEmpty() ? View.VISIBLE : View.GONE);
+        mUltimateRecyclerView.setVisibility(isInProgress && mListItems.isEmpty() ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int position = mLayoutManager.getPosition(view);
+        StackItem stackItem = mListItems.get(position);
+        showDetailsView(stackItem.getLink());
     }
 }

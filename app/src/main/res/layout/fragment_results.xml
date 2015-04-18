@@ -1,7 +1,24 @@
-<com.marshalchen.ultimaterecyclerview.UltimateRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/results_recycler_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:recyclerviewClipToPadding="true"
-    app:recyclerviewScrollbars="vertical"/>
+    android:layout_height="match_parent">
+
+    <com.loadindicators.adrianlesniak.library.LoaderView
+        android:id="@+id/results_progress_bar"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:loaderType="flip flop"
+        app:loaderFrameDelay="40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
+    <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
+        android:id="@+id/results_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:recyclerviewClipToPadding="true"
+        app:recyclerviewScrollbars="vertical"
+        app:recyclerviewEmptyView="@layout/empty_view" />
+
+</RelativeLayout>

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
+import com.squareup.otto.Produce;
 
 import pl.michalgorny.stacksearch.R;
 import pl.michalgorny.stacksearch.constants.Constants;
@@ -25,9 +26,8 @@ public class ResultsActivity extends AbstractActivity {
         Dart.inject(this);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mBus.post(new RetrievePostsRequestEvent(mTag));
+    @Produce
+    public RetrievePostsRequestEvent produceTag() {
+        return new RetrievePostsRequestEvent(mTag);
     }
 }
