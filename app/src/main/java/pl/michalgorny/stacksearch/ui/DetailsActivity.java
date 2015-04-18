@@ -1,5 +1,6 @@
 package pl.michalgorny.stacksearch.ui;
 
+import android.content.res.Configuration;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,7 +34,20 @@ public class DetailsActivity extends ActionBarActivity {
         ButterKnife.inject(this);
         Dart.inject(this);
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.loadUrl(mUrl);
+        if (savedInstanceState == null){
+            mWebView.loadUrl(mUrl);
+        }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mWebView.saveState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mWebView.restoreState(savedInstanceState);
+    }
 }

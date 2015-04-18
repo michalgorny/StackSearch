@@ -28,7 +28,7 @@ public class SearchActivityTest extends AbstractActivityTest {
     public void testButtonShouldBeDisabledWhenSearchFieldIsEmpty() throws Exception {
         EditText search = mSolo.getEditText(0);
         mSolo.clearEditText(search);
-        assertTrue(!mSolo.getButton(0).isEnabled());
+        assertFalse(mSolo.getButton(0).isEnabled());
     }
 
 }

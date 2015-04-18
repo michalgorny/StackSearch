@@ -2,6 +2,12 @@ package pl.michalgorny.stacksearch;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.view.View;
+import android.widget.TextView;
+
+import com.robotium.solo.Solo;
+
+import java.util.ArrayList;
 
 import pl.michalgorny.stacksearch.constants.Constants;
 import pl.michalgorny.stacksearch.ui.DetailsActivity;
@@ -25,6 +31,16 @@ public class ResultsActivityTest extends AbstractActivityTest {
         checkInternetStatus();
         mSolo.clickOnImage(1);
         mSolo.assertCurrentActivity(TestErrorTexts.ACTIVITY_NOT_CHANGED, DetailsActivity.class);
+    }
+
+    public void testShouldListInTheSamePositionAfterRotateScreen() throws Exception {
+        mSolo.setActivityOrientation(Solo.PORTRAIT);
+        mSolo.scrollToBottom();
+        final String beforeRotate = mSolo.getText(0).getText().toString();
+        mSolo.setActivityOrientation(Solo.LANDSCAPE);
+        Thread.sleep(300);
+        final String afterRotate = mSolo.getText(0).getText().toString();
+        assertEquals(beforeRotate, afterRotate);
     }
 
     @Override
