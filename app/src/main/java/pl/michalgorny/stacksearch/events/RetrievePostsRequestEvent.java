@@ -1,6 +1,8 @@
 package pl.michalgorny.stacksearch.events;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -10,10 +12,7 @@ import lombok.experimental.Accessors;
 
 @Getter
 @Accessors(prefix = "m")
+@RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 public class RetrievePostsRequestEvent {
     private final String mTag;
-
-    public RetrievePostsRequestEvent(String tag) {
-        mTag = tag;
-    }
 }

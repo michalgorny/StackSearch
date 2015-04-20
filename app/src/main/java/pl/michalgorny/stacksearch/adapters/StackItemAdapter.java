@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import pl.michalgorny.stacksearch.R;
 import pl.michalgorny.stacksearch.pojos.StackItem;
 
@@ -61,17 +63,14 @@ public class StackItemAdapter extends UltimateViewAdapter {
     }
 
     public static class StackItemViewHolder extends RecyclerView.ViewHolder {
-        TextView name;
-        TextView question;
-        TextView answersCount;
-        ImageView avatar;
+        @InjectView(R.id.result_list_item_name) TextView name;
+        @InjectView(R.id.result_list_item_question) TextView question;
+        @InjectView(R.id.result_list_item_answers_count) TextView answersCount;
+        @InjectView(R.id.result_list_item_avatar) ImageView avatar;
 
         public StackItemViewHolder(View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.result_list_item_name);
-            question = (TextView) itemView.findViewById(R.id.result_list_item_question);
-            answersCount = (TextView) itemView.findViewById(R.id.result_list_item_answers_count);
-            avatar = (ImageView) itemView.findViewById(R.id.result_list_item_avatar);
+            ButterKnife.inject(this, itemView);
 
         }
     }
