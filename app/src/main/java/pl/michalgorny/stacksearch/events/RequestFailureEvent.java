@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 @Getter
 @Accessors(prefix = "m")
-@RequiredArgsConstructor(access = AccessLevel.PUBLIC)
+@RequiredArgsConstructor(access = AccessLevel.PUBLIC, suppressConstructorProperties = true)
 public class RequestFailureEvent {
     private final Exception mSpiceException;
 }

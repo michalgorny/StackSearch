@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 
 @Getter
 @Accessors(prefix = "m")
-@RequiredArgsConstructor(access = AccessLevel.PUBLIC)
+@RequiredArgsConstructor(access = AccessLevel.PUBLIC, suppressConstructorProperties = true)
 public class RetrievePostsRequestEvent {
     private final String mTag;
 }
