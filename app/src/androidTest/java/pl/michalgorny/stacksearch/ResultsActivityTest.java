@@ -2,12 +2,8 @@ package pl.michalgorny.stacksearch;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.view.View;
-import android.widget.TextView;
 
 import com.robotium.solo.Solo;
-
-import java.util.ArrayList;
 
 import pl.michalgorny.stacksearch.constants.Constants;
 import pl.michalgorny.stacksearch.ui.DetailsActivity;

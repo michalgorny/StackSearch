@@ -1,7 +1,6 @@
 package pl.michalgorny.stacksearch.ui;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,9 +33,8 @@ import pl.michalgorny.stacksearch.pojos.StackItem;
 import pl.michalgorny.stacksearch.rest.StackQuestionListener;
 import pl.michalgorny.stacksearch.rest.StackQuestionRequest;
 
-import static pl.michalgorny.stacksearch.constants.Constants.WEB_URL_LINK;
 
-public class ResultsFragment extends Fragment implements View.OnClickListener {
+public class ResultsFragment extends Fragment {
 
     @Inject
     Bus mBus;
@@ -59,23 +57,28 @@ public class ResultsFragment extends Fragment implements View.OnClickListener {
     private LinearLayoutManager mLayoutManager;
     private String mTag = "";
 
+    private boolean mIsInProgress = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         StackSearchApplication.doDaggerInject(this);
-        mAdapter = new StackItemAdapter(this, mListItems);
-        mBus.post(new RetrievePostsRequestEvent(mTag));
+        mSpiceManager.start(getActivity());
+        mAdapter = new StackItemAdapter(mListItems);
+        mBus.register(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_results, container, false);
         ButterKnife.inject(this, view);
+        showProgress(mIsInProgress);
         return view;
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
     }
@@ -99,24 +102,11 @@ public class ResultsFragment extends Fragment implements View.OnClickListener {
         mUltimateRecyclerView.setAdapter(mAdapter);
     }
 
-    private void showDetailsView(String link) {
-        Intent i = new Intent(getActivity(), DetailsActivity.class);
-        i.putExtra(WEB_URL_LINK, link);
-        startActivity(i);
-    }
-
     @Override
-    public void onStart() {
-        super.onStart();
-        mBus.register(this);
-        mSpiceManager.start(getActivity());
-    }
-
-    @Override
-    public void onStop() {
+    public void onDestroy() {
+        super.onDestroy();
         mSpiceManager.shouldStop();
         mBus.unregister(this);
-        super.onStop();
     }
 
     @Subscribe
@@ -153,14 +143,9 @@ public class ResultsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showProgress(boolean isInProgress) {
-        mLoaderView.setVisibility(isInProgress  && mListItems.isEmpty() ? View.VISIBLE : View.GONE);
+        mIsInProgress = isInProgress;
+        mLoaderView.setVisibility(isInProgress && mListItems.isEmpty() ? View.VISIBLE : View.GONE);
         mUltimateRecyclerView.setVisibility(isInProgress && mListItems.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
-    @Override
-    public void onClick(View view) {
-        int position = mLayoutManager.getPosition(view);
-        StackItem stackItem = mListItems.get(position);
-        showDetailsView(stackItem.getLink());
-    }
 }
